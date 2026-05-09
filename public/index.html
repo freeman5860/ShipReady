@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ShipReady Landing Page Audit</title>
+    <meta name="description" content="Audit your SaaS landing page and unlock focused Hero and CTA rewrites.">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="workspace">
+        <div class="panel input-panel">
+          <div class="brand-row">
+            <div class="mark">SR</div>
+            <div>
+              <h1>Landing Page Audit</h1>
+              <p>Find where your SaaS page is leaking conversions, then fix the Hero and CTA.</p>
+            </div>
+          </div>
+
+          <form id="audit-form" class="stack">
+            <label>
+              SaaS landing page URL
+              <input id="url-input" type="url" placeholder="https://yourproduct.com">
+            </label>
+            <details id="manual-details">
+              <summary>Paste manually instead</summary>
+              <div class="manual-grid">
+                <label>Hero headline<input id="manual-hero" type="text" placeholder="Modern data infrastructure for teams"></label>
+                <label>Primary CTA<input id="manual-cta" type="text" placeholder="Book a demo"></label>
+                <label>Meta title<input id="manual-title" type="text" placeholder="Product name | Core promise"></label>
+                <label>Meta description<textarea id="manual-description" rows="3" placeholder="Short search description"></textarea></label>
+                <label class="wide">Main page sections<textarea id="manual-sections" rows="5" placeholder="Paste visible section copy, testimonials, trust signals, etc."></textarea></label>
+              </div>
+            </details>
+            <button class="primary" type="submit">Run free audit</button>
+          </form>
+
+          <div id="scrape-note" class="note hidden"></div>
+
+          <form id="brief-form" class="stack hidden">
+            <div class="section-head">
+              <h2>Unlock the context checks</h2>
+              <p>Three answers keep the diagnosis and rewrite from turning generic.</p>
+            </div>
+            <label>
+              Who needs this most?
+              <textarea id="brief-target" rows="3" placeholder="Example: solo AI tool founders with a launched product but weak homepage conversion"></textarea>
+              <span class="hint">Specific role, situation, or company stage.</span>
+            </label>
+            <label>
+              What do they use today instead?
+              <textarea id="brief-alternative" rows="3" placeholder="Example: they paste the page into ChatGPT, then manually rewrite sections in Framer"></textarea>
+              <span class="hint">Name a tool, workflow, or manual action.</span>
+            </label>
+            <label>
+              What is the biggest difference?
+              <textarea id="brief-difference" rows="3" placeholder="Example: ChatGPT gives loose advice; we generate a structured report and rewrite tied to the audit evidence"></textarea>
+              <span class="hint">Avoid “faster” or “smarter”; describe how the mechanism differs.</span>
+            </label>
+            <div id="brief-warnings" class="warning-list hidden"></div>
+            <button class="primary" type="submit">Unlock full diagnosis</button>
+          </form>
+        </div>
+
+        <div class="panel report-panel">
+          <div class="report-top">
+            <div>
+              <h2>Audit Report</h2>
+              <p id="report-subtitle">Run an audit to see 12 conversion checks.</p>
+            </div>
+            <span id="report-state" class="pill">Ready</span>
+          </div>
+
+          <div id="audit-list" class="audit-list empty">
+            <div class="empty-state">Your report will appear here.</div>
+          </div>
+
+          <div id="paywall" class="paywall hidden">
+            <div>
+              <h2>Fix the Hero and CTA</h2>
+              <p>$29 one-time unlocks three Hero rewrites, three CTA strategies, export, public report, and badge.</p>
+            </div>
+            <button id="unlock-button" class="primary" type="button">Unlock rewrite pack</button>
+          </div>
+
+          <div id="rewrite-pack" class="rewrite hidden"></div>
+        </div>
+      </section>
+    </main>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
