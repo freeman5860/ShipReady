@@ -15,29 +15,35 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
   setBusy(form, true);
   try {
-    const manualOpen = document.querySelector("#manual-details").open;
-    const payload = manualOpen
+    const manual = manualPayload();
+    const useManual = hasManualInput(manual);
+    const payload = useManual
       ? {
           mode: "manual",
-          manual: manualPayload(),
+          manual,
         }
       : {
           mode: "url",
           url: document.querySelector("#url-input").value,
-          manual: manualPayload(),
+          manual,
         };
     currentAudit = await api("/api/audit", payload);
-    renderAudit(currentAudit);
-    briefForm.classList.remove("hidden");
     paywall.classList.add("hidden");
     rewritePack.classList.add("hidden");
     if (!currentAudit.scrape.ok) {
       scrapeNote.textContent = currentAudit.scrape.message;
       scrapeNote.classList.remove("hidden");
       document.querySelector("#manual-details").open = true;
+      if (!hasUsablePageContent(currentAudit)) {
+        renderManualFallback(currentAudit);
+        briefForm.classList.add("hidden");
+        return;
+      }
     } else {
       scrapeNote.classList.add("hidden");
     }
+    renderAudit(currentAudit);
+    briefForm.classList.remove("hidden");
   } catch (error) {
     showError(error.message);
   } finally {
@@ -98,6 +104,10 @@ function manualPayload() {
   };
 }
 
+function hasManualInput(manual) {
+  return Boolean(manual.hero || manual.cta || manual.title || manual.metaDescription || manual.sections);
+}
+
 async function api(path, body) {
   const response = await fetch(path, {
     method: "POST",
@@ -114,6 +124,24 @@ function renderAudit(audit) {
   reportState.textContent = audit.brief ? "Full audit" : "Needs context";
   reportSubtitle.textContent = audit.page.title || audit.page.url || "Manual page audit";
   auditList.innerHTML = audit.items.map(renderAuditItem).join("");
+}
+
+function renderManualFallback(audit) {
+  auditList.classList.add("empty");
+  reportState.textContent = "Needs paste";
+  reportSubtitle.textContent = audit.page.url || "Manual page audit";
+  auditList.innerHTML = `<div class="empty-state">I couldn't read enough page copy to audit this URL. Paste the visible homepage copy on the left, then run the audit again.</div>`;
+}
+
+function hasUsablePageContent(audit) {
+  const page = audit.page || {};
+  return Boolean(
+    page.hero ||
+      page.title ||
+      page.meta_description ||
+      (page.ctas && page.ctas.length) ||
+      audit.source === "url_scrape",
+  );
 }
 
 function renderAuditItem(item) {

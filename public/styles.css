@@ -143,6 +143,11 @@ summary {
   font-weight: 700;
 }
 
+.manual-help {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
 .manual-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

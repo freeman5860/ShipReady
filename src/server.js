@@ -127,6 +127,12 @@ async function createAudit(body) {
   if (body.mode === "manual") {
     page = normalizeManualInput(body.manual || {});
     source = "manual_paste";
+    if (!hasUsablePageContent(page)) {
+      scrape = {
+        ok: false,
+        message: "Paste the page's Hero, CTA, meta, and main sections before running a manual audit.",
+      };
+    }
   } else {
     try {
       const requestedUrl = normalizeUrl(body.url || "");
@@ -141,6 +147,15 @@ async function createAudit(body) {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const html = await response.text();
       page = extractPageFromHtml(html, requestedUrl);
+      if (!hasUsablePageContent(page)) {
+        source = "manual_paste";
+        page = normalizeManualInput(body.manual || { url: requestedUrl });
+        scrape = {
+          ok: false,
+          message:
+            "The page was reached, but no usable landing page copy was detected. Paste the Hero, CTA, meta, and main sections to continue.",
+        };
+      }
     } catch (error) {
       page = normalizeManualInput(body.manual || { url: body.url || "" });
       source = "manual_paste";
@@ -164,6 +179,16 @@ async function createAudit(body) {
     rewrite: null,
     shareId: null,
   };
+}
+
+function hasUsablePageContent(page) {
+  return Boolean(
+    page.hero ||
+      page.title ||
+      page.metaDescription ||
+      page.ctas.length ||
+      (page.bodyText && page.bodyText.length >= 120),
+  );
 }
 
 function requireAudit(id) {
