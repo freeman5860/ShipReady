@@ -19,6 +19,36 @@ npm start
 
 Open `http://localhost:5173`.
 
+## Deploy to Vercel
+
+The app is prepared for Vercel:
+
+- Static UI is served from `public/`.
+- Dynamic API routes are handled by `api/server.js`.
+- `/api/*` and `/r/:share` are routed through `vercel.json`.
+
+For a demo deployment, no environment variables are required. The app will use in-memory storage, which can reset between serverless cold starts.
+
+For a usable production deployment, add Vercel KV or Upstash Redis REST variables:
+
+```bash
+KV_REST_API_URL=...
+KV_REST_API_TOKEN=...
+```
+
+Compatible Upstash names also work:
+
+```bash
+UPSTASH_REDIS_REST_URL=...
+UPSTASH_REDIS_REST_TOKEN=...
+```
+
+Health check:
+
+```bash
+curl https://your-domain.vercel.app/api/health
+```
+
 ## Scripts
 
 ```bash

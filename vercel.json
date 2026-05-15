@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/server?path=/api/:path*"
+    },
+    {
+      "source": "/r/:share",
+      "destination": "/api/server?share=:share"
+    }
+  ]
+}
